@@ -25,13 +25,15 @@ public class UserDAO {
 	}
 	
 	// DB DELETE operation by ID
-	public void deleteById(String usrLogin) {
-		repo.deleteById(usrLogin);
+	// public void deleteById(String usrLogin) {
+	public void deleteById(int usrID) {
+		repo.deleteById(usrID);
 	}
 	
 	// DB UPDATE operation by object
 	public User update(User obj) {
-		User db=repo.findById(obj.getUsrLogin()).orElse(null);
+		User db=repo.findById(obj.getUsrID()).orElse(null);
+		db.setUsrLogin(obj.getUsrLogin());
 		db.setUsrPassword(obj.getUsrPassword());
 		db.setPrsID(obj.getPrsID());
 		db.setLastSuccessLogin(obj.getLastSuccessLogin());
@@ -46,7 +48,15 @@ public class UserDAO {
 	}
 	
 	// DB SELECT operation, retrieve by id the object/entity
-	public User get(String usrLogin){
-		return repo.findById(usrLogin).orElse(null);
+	public User get(int usrID){
+		return repo.findById(usrID).orElse(null);
+	}
+
+	// DB SELECT operation, retrieve by id the object/entity
+	public User getByLogin(String usrLogin){
+		List<User> list = repo.findByUsrLogin(usrLogin);
+		System.out.println("Size of returned User-List " + list.size());
+		System.out.println(list);
+		return list.get(0);
 	}
 }

@@ -3,15 +3,17 @@ package tr.com.macik.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.EmployeeDAO;
 import tr.com.macik.myapp.pojo.Employee;
+import tr.com.macik.myapp.pojo.PersonComm;
 
-@Controller
+@RestController
 public class EmployeeController {
 	@Autowired
 	EmployeeDAO dao;
@@ -31,12 +33,17 @@ public class EmployeeController {
 		return dao.get(employee.getEmpID());
 	}
 	
+	@PostMapping("/emp/search")
+	public List<Employee> getSearch(@RequestBody Employee employee){
+		return dao.search(employee);
+	}
+
 	@GetMapping("/emp/getall")
 	public List<Employee> getCategories(){
 		return dao.getall();
 	}
 
-	@PostMapping("/emp/delete")
+	@DeleteMapping("/emp/delete")
 	public void delete(@RequestBody Employee employee) {
 		dao.deleteById(employee.getEmpID());
 	}

@@ -3,6 +3,7 @@ package tr.com.macik.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,16 +28,16 @@ public class CommunicationTypeController {
 	}
 
 	@GetMapping("/cmm/get")
-	public CommunicationType getCommunicationType(@RequestBody CommunicationType communicationType){
+	public CommunicationType get(@RequestBody CommunicationType communicationType){
 		return dao.get(communicationType.getCmmCd());
 	}
 	
 	@GetMapping("/cmm/getall")
-	public List<CommunicationType> getCategories(){
+	public List<CommunicationType> getAll(){
 		return dao.getall();
 	}
 
-	@PostMapping("/cmm/delete")
+	@DeleteMapping("/cmm/delete")
 	public void delete(@RequestBody CommunicationType communicationType) {
 		dao.deleteById(communicationType.getCmmCd());
 	}

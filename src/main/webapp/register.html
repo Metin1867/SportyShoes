@@ -11,7 +11,7 @@
 <center>
 <form action="Register" method="post">
 <table>
-<tr><td><label>Salutation</label></td><td><input type="checkbox" name="Salutation" value="f">Miss</input><input type="checkbox" name="Salutation" value="m">Mister</input></td></tr>
+<tr><td><label>Salutation</label></td><td><input type="radio" id="salutation_f" name="salutation" value="f">Miss</input><input type="radio" id="salutation_m" name="salutation" value="m">Mister</input></td></tr>
 <tr><td><label>Firstname</label></td><td><input type="text" name="firstname"></td></tr>
 <tr><td><label>Lastname</label></td><td><input type="text" name="lastname"></td></tr>
 <tr><td><label>Birthday</label></td><td><input type="date" name="birthday"></td></tr>
@@ -21,7 +21,7 @@
 <tr><td><label>Password</label></td><td><input type="password" name="pwd"></td></tr>
 <tr><td><label>Verify Password</label></td><td><input type="password" name="pwdverify"></td></tr>
 <tr><td><br></td></tr>
-<tr><td colspan=2 align="right"><input type="submit" value="Register"> <input type="submit" value="Cancel"></td></tr>
+<tr><td colspan=2 align="right"><input type="submit" name="cmd" value="Register"> <input type="submit" name="cmd" value="Cancel"></td></tr>
 <tr><td colspan=2 align="center">If you have an account, please login <a href="login.html">here</a></td></tr>
 </table>
 </form>

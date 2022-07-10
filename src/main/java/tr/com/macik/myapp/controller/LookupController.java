@@ -3,15 +3,16 @@ package tr.com.macik.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.LookupDAO;
 import tr.com.macik.myapp.pojo.Lookup;
 
-@Controller
+@RestController
 public class LookupController {
 	@Autowired
 	LookupDAO dao;
@@ -39,7 +40,7 @@ public class LookupController {
 		return dao.getall();
 	}
 
-	@PostMapping("/lkp/delete")
+	@DeleteMapping("/lkp/delete")
 	public void delete(@RequestBody Lookup lookup) {
 		dao.deleteById(lookup.getLkpID());
 	}

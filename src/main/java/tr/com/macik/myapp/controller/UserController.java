@@ -3,18 +3,26 @@ package tr.com.macik.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.UserDAO;
 import tr.com.macik.myapp.pojo.User;
+import tr.com.macik.myapp.repo.UserRepo;
 
-@Controller
+@RestController
 public class UserController {
 	@Autowired
 	UserDAO dao;
+	@Autowired
+	UserRepo repo;
 
 	@PostMapping("/usr/insert")
 	public User insert(@RequestBody User user) {
@@ -26,9 +34,9 @@ public class UserController {
 		return dao.insertAll(usrList);
 	}
 
-	@GetMapping("/usr/get")
-	public User getUser(@RequestBody User user){
-		return dao.get(user.getUsrLogin());
+	@GetMapping("/usr/{id}")
+	public User getUser(@PathVariable(value = "id") int usrID){
+		return dao.get(usrID);
 	}
 	
 	@GetMapping("/usr/getall")
@@ -36,9 +44,9 @@ public class UserController {
 		return dao.getall();
 	}
 
-	@PostMapping("/usr/delete")
+	@DeleteMapping("/usr/delete")
 	public void delete(@RequestBody User user) {
-		dao.deleteById(user.getUsrLogin());
+		dao.deleteById(user.getUsrID());
 	}
 
 	@PostMapping("/usr/update")
@@ -46,4 +54,9 @@ public class UserController {
 		return dao.update(user);
 	}
 
+	@PostMapping("/usr/byLogin")
+	public ResponseEntity<List<User>> getUserByLogin(@RequestParam String usrLogin) {
+		System.out.println("/usr/byLogin "+ usrLogin);
+		return new ResponseEntity<List<User>>(repo.findByUsrLogin(usrLogin), HttpStatus.OK);
+	}
 }

@@ -3,6 +3,7 @@ package tr.com.macik.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class PurchaseDetailsController {
 		return dao.getall();
 	}
 
-	@PostMapping("/pcd/delete")
+	@DeleteMapping("/pcd/delete")
 	public void delete(@RequestBody PurchaseDetails purchaseDetails) {
 		dao.deleteById(purchaseDetails.getPcdID());
 	}
