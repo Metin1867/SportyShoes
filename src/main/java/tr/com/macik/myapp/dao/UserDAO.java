@@ -33,6 +33,16 @@ public class UserDAO {
 	// DB UPDATE operation by object
 	public User update(User obj) {
 		User db=repo.findById(obj.getUsrID()).orElse(null);
+		System.out.println(
+				"[usrID]: "+db.getUsrID()+
+				"User Login: "+obj.getUsrLogin()+
+				"Password: "+obj.getUsrPassword()+
+				"Person Identifier: "+obj.getPrsID()+
+				"Last Success Login: "+obj.getLastSuccessLogin()+
+				"Last Failed Login: "+obj.getLastFailedLogin()+
+				"Counter Login: "+obj.getCounterLogin());
+		
+		
 		db.setUsrLogin(obj.getUsrLogin());
 		db.setUsrPassword(obj.getUsrPassword());
 		db.setPrsID(obj.getPrsID());

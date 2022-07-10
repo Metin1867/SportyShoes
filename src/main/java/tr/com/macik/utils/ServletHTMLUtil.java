@@ -31,6 +31,10 @@ public class ServletHTMLUtil {
 		return getLabel(label, fieldName)+"<input type='number' name='"+fieldName+"' readonly value='"+getValue(value)+"'><br/>";
 	}
 
+	public static byte[] getByteValue(String value) {
+		return value.getBytes();
+	}
+
 	public static String getLabel(String label, String fieldName) {
 		return "<label for='"+fieldName+"'>"+label+":</label>";
 	}
@@ -160,4 +164,8 @@ public class ServletHTMLUtil {
         }
         return date != null;
     }
+
+	public static CharSequence getByteInput(String label, String fieldName, byte[] byteStream) {
+		return getLabel(label, fieldName)+"<input type='text' name='"+fieldName+"' value='"+getValue(byteStream)+"'><br/>";
+	}
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import tr.com.macik.gui.EmployeeDto;
 import tr.com.macik.myapp.pojo.Employee;
 import tr.com.macik.utils.ServletHTMLUtil;
+import tr.com.macik.utils.SessionUtil;
 
 /**
  * Servlet implementation class EmployeeServlet
@@ -44,8 +45,7 @@ public class EmployeesServlet extends HttpServlet {
 		pw.append(request.getParameter("cmd")).println();
 
 		String usrLogin = (String) hsess.getAttribute("userid");
-		boolean isEmployee = (boolean) hsess.getAttribute("employee");
-		System.out.println("Credentials: " + usrLogin + "/" + isEmployee);
+		boolean isEmployee = SessionUtil.getBoolean(hsess.getAttribute("employee"));
 
 		if (usrLogin != null && isEmployee) {
 			response.setContentType("text/html");
@@ -61,9 +61,9 @@ public class EmployeesServlet extends HttpServlet {
 	private void printEmployees(PrintWriter pw, List<Employee> employees) {
 		// Menu Main/Refresh/Insert
 		pw.append("<h1>Employee Master List</h1><br>").println();
-		pw.append("<a href='Login'><img src='data/menu3.png' alt='Menu' width='28' height='28'></a>");
-		pw.append(" | <a href='StudentsServlet'><img src='data/refresh.png' alt='Refresh' width='28' height='28'></a>");
-		pw.append(" | <a href='StudentEditServlet'><img src='data/useradd.png' alt='Add' width='30' height='30'></a>");
+		pw.append("<a href='pages/profile.jsp'><img src='data/menu3.png' alt='Menu' width='28' height='28'></a>");
+		pw.append(" | <a href='EmployeesServlet'><img src='data/refresh.png' alt='Refresh' width='28' height='28'></a>");
+		pw.append(" | <a href='EmployeeEditServlet'><img src='data/useradd.png' alt='Add' width='30' height='30'></a>");
 		pw.println("<br/><br/>");
 		pw.append("<table>");
 		pw.append("<tr>");
@@ -83,26 +83,26 @@ public class EmployeesServlet extends HttpServlet {
 		pw.append("<th>actions</th>");
 		pw.append("</tr>");
 		// Data
-		System.out.println(employees);
-		for (Employee emp : employees) {
-			pw.append("<tr>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmpID())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getPrsID()).toString()).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getSocialSecurityNumber())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getCivilStatus())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getNumberOfChild())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getPhone())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmail())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmergencyContact())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmergencyNumber())).append("</td>").println();
-			// Menu Edit/Delete Row
-			String cmdPars = "empid="+emp.getEmpID();
-			pw.append("<td>").append("<a href='EmployeeEditServlet?"+cmdPars+"'><img src='data/useredit.png' alt='Edit' width='30' height='30'></a>").println();
-			cmdPars = cmdPars+"&msg="+emp.getPrsID()+" "+emp.getEmail();
-			pw.append("|<a href='EmployeeDeleteServlet?"+cmdPars+"'><img src='data/userdelete.png' alt='Delete' width='30' height='30'></a>");
-			pw.append("</td>").println();
-			pw.append("</tr>").println();
-		}
+		if (employees != null && employees.size()>0)
+			for (Employee emp : employees) {
+				pw.append("<tr>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmpID())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getPrsID()).toString()).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getSocialSecurityNumber())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getCivilStatus())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getNumberOfChild())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getPhone())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmail())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmergencyContact())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(emp.getEmergencyNumber())).append("</td>").println();
+				// Menu Edit/Delete Row
+				String cmdPars = "empid="+emp.getEmpID();
+				pw.append("<td>").append("<a href='EmployeeEditServlet?"+cmdPars+"'><img src='data/useredit.png' alt='Edit' width='30' height='30'></a>").println();
+				cmdPars = cmdPars+"&msg="+emp.getPrsID()+" "+emp.getEmail();
+				pw.append("|<a href='EmployeeDeleteServlet?"+cmdPars+"'><img src='data/userdelete.png' alt='Delete' width='30' height='30'></a>");
+				pw.append("</td>").println();
+				pw.append("</tr>").println();
+			}
 		pw.append("<table>");
 		
 	}

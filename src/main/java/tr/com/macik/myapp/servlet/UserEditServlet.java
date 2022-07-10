@@ -40,23 +40,21 @@ public class UserEditServlet extends HttpServlet {
 		response.setContentType("text/html");
 		String usridStr = request.getParameter("usrid");
 		int usrid = -1;
+		User usr = new User();
 		if (usridStr!=null) {
 			usrid = Integer.valueOf(usridStr);
 			isNew = false;
+
+			usr.setUsrID(usrid);
+			usr = PersonDto.readByID(usr);
+			if (usr == null)
+				usr = new User();
 		}
-		User usr = new User(usrid, null, null, -1, false, null, null, 0);
-		usr = PersonDto.readByID(usr);
 		showEditForm(pw, usr);
 	}
 
 	private void showEditForm(PrintWriter pw, User usr) {
 		pw.append("<h1>User Maintenance</h1>");
-		if (usr == null) {
-			usr = new User();
-			System.out.println("User Maintenance: INSERT Form");
-		} else {
-			System.out.println("User Maintenance: UPDATE Form");
-		}
 		pw.append(ServletHTMLUtil.startFormPost("UserEditServlet")); 
 		pw.append(ServletHTMLUtil.getNumberInputReadOnly("User Identifier", "usrid", usr.getUsrID() ));
 		pw.append(ServletHTMLUtil.getTextInput("User Login", "usr_login", usr.getUsrLogin() ));

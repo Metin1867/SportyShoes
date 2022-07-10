@@ -31,14 +31,14 @@
 		
 	if (usrLogin != null) {
 		if (isEmployee) {
-			out.println("<a href='UsersServlet'>Users</a><br>");
-			out.println("<a href='EmployeeServlet'>Employee</a><br>");
-			out.println("<a href='ProductServlet'>Product</a><br>");
-			out.println("<a href='CategoryServlet'>Category</a><br>");
+			out.println("<a href='/UsersServlet'>Users</a><br>");
+			out.println("<a href='/EmployeesServlet'>Employee</a><br>");
+			out.println("<a href='/ProductsServlet'>Product</a><br>");
+			out.println("<a href='/CategoriesServlet'>Category</a><br>");
 		} 
-		out.println("<a href='ShopServlet'>Shop</a><br>");
-		out.println("<a href='OrderServlet'>Order</a><br>");
-		out.println("<a href='LogoutServlet'>Logout</a><br>");
+		out.println("<a href='/ShopServlet'>Shop</a><br>");
+		out.println("<a href='/OrderServlet'>Order</a><br>");
+		out.println("<a href='/Logout'>Logout</a><br>");
 	} else {
 			out.println("Redirect to main page");
 %>

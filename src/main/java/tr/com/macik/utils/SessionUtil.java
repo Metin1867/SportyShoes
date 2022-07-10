@@ -14,4 +14,20 @@ public class SessionUtil {
 			return true;
 	}
 
+	public static boolean getBoolean(Object attribute, boolean defaultValue) {
+		if (attribute == null)
+			return defaultValue;
+		return (boolean) attribute;
+	}
+
+	public static boolean getBoolean(Object attribute) {
+		return getBoolean(attribute, false);
+	}
+
+
+	public static String getString(Object attribute) {
+		if (attribute == null)
+			return (String) null;
+		return (String) attribute;
+	}
 }
