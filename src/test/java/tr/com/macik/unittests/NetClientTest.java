@@ -40,16 +40,26 @@ public class NetClientTest {
 
 		// doTest();
 		
+		doWorkReadByID();
+		
 		// doWorkPerson();
-
+		
 		// doWorkCommunicationType();
 
 		// doWorkPersonComm();
 
 		// doWorkRegister();
 
-		doWorkEmployee();
+		// doWorkEmployee();
 	}
+
+	private static void doWorkReadByID() {
+		Employee emp = new Employee();
+		emp.setEmpID(103);
+		emp = EmployeeDto.readByID(emp);
+		System.out.println("Employee Object: " + emp);
+	}
+
 
 	private static void doWorkEmployee() {
 		String[][] personTypes = {{"Employee", "metin.acikalin@sportyshoes.com"}

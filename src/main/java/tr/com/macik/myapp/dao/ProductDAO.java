@@ -35,8 +35,8 @@ public class ProductDAO {
 		db.setCatID(obj.getCatID());
 		db.setProductLabel(obj.getProductLabel());
 		db.setProductDescription(obj.getProductDescription());
-		db.setProductDetails(obj.getProductDescription());
-		// db.setProductImage(obj.getProductImage());
+		db.setProductDetails(obj.getProductDetails());
+		db.setProductImage(obj.getProductImage());
 		db.setPrice(obj.getPrice());
 		return repo.save(db);
 	}

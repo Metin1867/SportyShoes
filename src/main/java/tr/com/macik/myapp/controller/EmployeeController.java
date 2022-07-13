@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.EmployeeDAO;
 import tr.com.macik.myapp.pojo.Employee;
-import tr.com.macik.myapp.pojo.PersonComm;
 
 @RestController
 public class EmployeeController {
@@ -28,9 +28,9 @@ public class EmployeeController {
 		return dao.insertAll(catList);
 	}
 
-	@GetMapping("/emp/get")
-	public Employee getEmployee(@RequestBody Employee employee){
-		return dao.get(employee.getEmpID());
+	@GetMapping("/emp/{id}")
+	public Employee getEmployee(@PathVariable(value = "id") int empID){
+		return dao.get(empID);
 	}
 	
 	@PostMapping("/emp/search")

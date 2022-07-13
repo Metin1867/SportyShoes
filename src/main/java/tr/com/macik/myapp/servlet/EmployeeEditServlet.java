@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tr.com.macik.gui.EmployeeDto;
-import tr.com.macik.gui.PersonDto;
 import tr.com.macik.myapp.pojo.Employee;
-import tr.com.macik.myapp.pojo.User;
 import tr.com.macik.utils.ServletHTMLUtil;
 
 /**
@@ -70,7 +68,8 @@ public class EmployeeEditServlet extends HttpServlet {
 		pw.append(ServletHTMLUtil.getTextInput("Email", "email", emp.getEmail() ));
 		pw.append(ServletHTMLUtil.getTextInput("emergencyContact", "emergency_contact", emp.getEmergencyContact() ));
 		pw.append(ServletHTMLUtil.getTextInput("emergencyNumber", "emergency_number", emp.getEmergencyNumber() ));
-		pw.append(ServletHTMLUtil.getSubmitInput("register"));
+		pw.append(ServletHTMLUtil.getSubmitInput("Save"));
+		pw.append(ServletHTMLUtil.getSubmitInput("Cancel"));
 		pw.append(ServletHTMLUtil.endForm()); 
 		
 	}
@@ -83,25 +82,27 @@ public class EmployeeEditServlet extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		pw.append("Served at: ").append(request.getContextPath());
 		response.setContentType("text/html");
-		int empid = ServletHTMLUtil.getIntValue(request.getParameter("empid"));
-		int prsid = ServletHTMLUtil.getIntValue(request.getParameter("prsid"));
-		String socialSecurityNumber = request.getParameter("social_security_number");
-		String civilStatus = request.getParameter("civil_status");
-		int numberOfChild = ServletHTMLUtil.getIntValue(request.getParameter("number_of_child"));
-		String phone = request.getParameter("phone");
-		String email = request.getParameter("email");
-		String emergencyContact = request.getParameter("emergency_contact");
-		String emergencyNumber = request.getParameter("emergency_number");
-		Employee emp = new Employee(empid, prsid, socialSecurityNumber, civilStatus, numberOfChild, phone, email, emergencyContact, emergencyNumber);
-		
-		if (isNew) {
-			System.out.println("Employee INSERT");
-			EmployeeDto.create(emp);
-		} else {
-			System.out.println("Employee UPDATE");
-			EmployeeDto.update(emp);
+		String action = request.getParameter("submit");
+		if (!"Cancel".equals(action)) {
+			int empid = ServletHTMLUtil.getIntValue(request.getParameter("empid"));
+			int prsid = ServletHTMLUtil.getIntValue(request.getParameter("prsid"));
+			String socialSecurityNumber = request.getParameter("social_security_number");
+			String civilStatus = request.getParameter("civil_status");
+			int numberOfChild = ServletHTMLUtil.getIntValue(request.getParameter("number_of_child"));
+			String phone = request.getParameter("phone");
+			String email = request.getParameter("email");
+			String emergencyContact = request.getParameter("emergency_contact");
+			String emergencyNumber = request.getParameter("emergency_number");
+			Employee emp = new Employee(empid, prsid, socialSecurityNumber, civilStatus, numberOfChild, phone, email, emergencyContact, emergencyNumber);
+			
+			if (isNew) {
+				System.out.println("Employee INSERT");
+				EmployeeDto.create(emp);
+			} else {
+				System.out.println("Employee UPDATE");
+				EmployeeDto.update(emp);
+			}
 		}
-		
 		System.out.println("Redirect to EmployeesServlet");
 		RequestDispatcher rd = request.getRequestDispatcher("EmployeesServlet");
 		rd.forward(request, response);

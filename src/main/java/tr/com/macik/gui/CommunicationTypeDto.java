@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tr.com.macik.client.NetClient;
 import tr.com.macik.myapp.pojo.CommunicationType;
-import tr.com.macik.myapp.pojo.User;
 
 public class CommunicationTypeDto {
 	private static CommunicationTypeDto thisSingleInstance;
@@ -90,7 +89,7 @@ public class CommunicationTypeDto {
 	public static CommunicationType readByID(CommunicationType pommunicationType) {
 		if (pommunicationType==null)
 			return null;
-		NetClient client = new NetClient(NetClient.GET, "/cmm/get", pommunicationType);
+		NetClient client = new NetClient(NetClient.GET, "/cmm/"+pommunicationType.getCmmCd());
 		client.read();
 		String json = client.toString();
 		client.end();

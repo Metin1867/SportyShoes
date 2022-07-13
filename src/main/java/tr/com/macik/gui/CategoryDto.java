@@ -1,9 +1,6 @@
 package tr.com.macik.gui;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -46,7 +43,7 @@ public class CategoryDto {
 	public static Category readByID(Category category) {
 		if (category==null)
 			return null;
-		NetClient client = new NetClient(NetClient.GET, "/cat/get", category);
+		NetClient client = new NetClient(NetClient.GET, "/cat/"+category.getCatID());
 		client.read();
 		String json = client.toString();
 		client.end();

@@ -11,6 +11,10 @@ public class ServletHTMLUtil {
 		return getNumberInput(label, fieldName, ""+getValue(value));
 	}
 
+	public static CharSequence getNumberInput(String label, String fieldName, double value) {
+		return getNumberInput(label, fieldName, ""+getValue(value));
+	}
+
 	public static CharSequence getNumberInput(String label, String fieldName, String value) {
 		return getLabel(label, fieldName)+"<input type='number' name='"+fieldName+"' value='"+getValue(value)+"'><br/>";
 	}
@@ -31,7 +35,14 @@ public class ServletHTMLUtil {
 		return getLabel(label, fieldName)+"<input type='number' name='"+fieldName+"' readonly value='"+getValue(value)+"'><br/>";
 	}
 
+
+	public static CharSequence getCurrencyInput(String label, String fieldName, float value) {
+		return getLabel(label, fieldName)+"<input type='number' step='0.01' name='"+fieldName+"' value='"+getValue(value)+"'><br/>";
+	}
+
 	public static byte[] getByteValue(String value) {
+		if (value == null)
+			return "".getBytes();
 		return value.getBytes();
 	}
 
@@ -45,10 +56,20 @@ public class ServletHTMLUtil {
 		return ""+value;
 	}
 
+	public static String getValue(double value) {
+		return String.format("%.2f", value);
+	}
+
 	public static int getIntValue(String value) {
 		if (value==null || "".equals(value))
 			return -1;
 		return Integer.valueOf(value);
+	}
+
+	public static double getDoubleValue(String value) {
+		if (value==null || "".equals(value))
+			return 0;
+		return Double.valueOf(value);
 	}
 
 	public static String getValue(Object value) {
@@ -58,7 +79,7 @@ public class ServletHTMLUtil {
 	}
 
 	public static CharSequence getSubmitInput(String name) {
-		return "<input type='submit' name='submit' value='"+name+"'><br/>";
+		return "<input type='submit' name='submit' value='"+name+"'>";
 	}
 
 	public static CharSequence startForm(String servletName, String method) {

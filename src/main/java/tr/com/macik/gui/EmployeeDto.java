@@ -26,7 +26,7 @@ public class EmployeeDto {
 	public static Employee readByID(Employee employee) {
 		if (employee==null)
 			return null;
-		NetClient client = new NetClient(NetClient.GET, "/emp/get", employee);
+		NetClient client = new NetClient(NetClient.GET, "/emp/"+employee.getEmpID());
 		client.read();
 		String json = client.toString();
 		client.end();

@@ -3,7 +3,9 @@ package tr.com.macik.myapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,9 +28,9 @@ public class PurchaseController {
 		return dao.insertAll(pchList);
 	}
 
-	@GetMapping("/pch/get")
-	public Purchase getPurchase(@RequestBody Purchase purchase){
-		return dao.get(purchase.getPchID());
+	@GetMapping("/pch/{id}")
+	public Purchase getPurchase(@PathVariable(value = "id") int pchID){
+		return dao.get(pchID);
 	}
 	
 	@GetMapping("/pch/getall")
@@ -36,7 +38,7 @@ public class PurchaseController {
 		return dao.getall();
 	}
 
-	@PostMapping("/pch/delete")
+	@DeleteMapping("/pch/delete")
 	public void delete(@RequestBody Purchase purchase) {
 		dao.deleteById(purchase.getPchID());
 	}

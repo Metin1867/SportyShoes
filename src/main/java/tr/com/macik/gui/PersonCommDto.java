@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tr.com.macik.client.NetClient;
 import tr.com.macik.myapp.pojo.PersonComm;
-import tr.com.macik.myapp.pojo.User;
 
 public class PersonCommDto {
 	// CRUD
@@ -27,7 +26,7 @@ public class PersonCommDto {
 	public static PersonComm readByID(PersonComm personComm) {
 		if (personComm==null)
 			return null;
-		NetClient client = new NetClient(NetClient.GET, "/pco/get", personComm);
+		NetClient client = new NetClient(NetClient.GET, "/pco/"+personComm.getCmmCd());
 		client.read();
 		String json = client.toString();
 		client.end();

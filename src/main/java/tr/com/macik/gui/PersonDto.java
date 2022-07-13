@@ -72,10 +72,18 @@ public class PersonDto {
 		return toUserList(json);
 	}
 
+	public static List<Person> readAllPerson() {
+		NetClient client = new NetClient(NetClient.GET, "/prs/getall");
+		client.read();
+		String json = client.toString();
+		client.end();
+		return toPersonList(json);
+	}
+
 	public static Person readByID(Person person) {
 		if (person==null)
 			return null;
-		NetClient client = new NetClient(NetClient.GET, "/prs/get", person);
+		NetClient client = new NetClient(NetClient.GET, "/prs/"+person.getPrsID());
 		client.read();
 		String json = client.toString();
 		client.end();
@@ -93,6 +101,16 @@ public class PersonDto {
 		return firstUser(json);
 	}
 
+	public static Person update(Person person) {
+		if (person==null)
+			return null;
+		NetClient client = new NetClient(NetClient.POST, "/prs/update", person);
+		client.read();
+		String json = client.toString();
+		client.end();
+		return firstPerson(json);
+	}
+
 	// Delete
 	public static User delete(User user) {
 		if (user==null)
@@ -102,6 +120,16 @@ public class PersonDto {
 		String json = client.toString();
 		client.end();
 		return firstUser(json);
+	}
+
+	public static Person delete(Person person) {
+		if (person==null)
+			return null;
+		NetClient client = new NetClient(NetClient.DELETE, "/prs/delete", person);
+		client.read();
+		String json = client.toString();
+		client.end();
+		return firstPerson(json);
 	}
 
 	// Helper
@@ -152,6 +180,16 @@ public class PersonDto {
 			e.printStackTrace();
 		}
 		return users;
+	}
+
+	public static List<User> search(User user) {
+		if (user==null)
+			return null;
+		NetClient client = new NetClient(NetClient.POST, "/usr/search", user);
+		client.read();
+		String json = client.toString();
+		client.end();
+		return toUserList(json);
 	}
 
 	public static List<Person> search(Person person) {

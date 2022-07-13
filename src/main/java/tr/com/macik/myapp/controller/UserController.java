@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.UserDAO;
+import tr.com.macik.myapp.pojo.Person;
 import tr.com.macik.myapp.pojo.User;
 import tr.com.macik.myapp.repo.UserRepo;
 
@@ -40,8 +41,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/usr/getall")
-	public List<User> getCategories(){
+	public List<User> getUsers(){
 		return dao.getall();
+	}
+	
+	@PostMapping("/usr/search")
+	public List<User> getSearch(@RequestBody User user){
+		return dao.search(user);
 	}
 
 	@DeleteMapping("/usr/delete")
