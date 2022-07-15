@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.CategoryDAO;
 import tr.com.macik.myapp.pojo.Category;
+import tr.com.macik.myapp.pojo.User;
 
 @RestController
 public class CategoryConroller {
@@ -36,6 +37,11 @@ public class CategoryConroller {
 	@GetMapping("/cat/getall")
 	public List<Category> getCategories(){
 		return dao.getall();
+	}
+	
+	@PostMapping("/cat/search")
+	public List<Category> getSearch(@RequestBody Category category){
+		return dao.search(category);
 	}
 
 	@DeleteMapping("/cat/delete")

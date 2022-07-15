@@ -105,4 +105,13 @@ public class CategoryDto {
 		return categorys;
 	}
 
+	public static List<Category> search(Category category) {
+		if (category==null)
+			return null;
+		NetClient client = new NetClient(NetClient.POST, "/cat/search", category);
+		client.read();
+		String json = client.toString();
+		client.end();
+		return toCategoryList(json);
+	}
 }
