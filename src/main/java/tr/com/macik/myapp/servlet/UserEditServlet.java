@@ -41,6 +41,7 @@ public class UserEditServlet extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		pw.append("Served at: ").append(request.getContextPath());
 		response.setContentType("text/html");
+		isNew=true;
 		String usridStr = request.getParameter("usrid");
 		int usrid = -1;
 		User usr = new User();
@@ -50,8 +51,10 @@ public class UserEditServlet extends HttpServlet {
 
 			usr.setUsrID(usrid);
 			usr = PersonDto.readByID(usr);
-			if (usr == null)
+			if (usr == null) {
 				usr = new User();
+				isNew = true;
+			}
 		}
 		showEditForm(pw, usr);
 	}

@@ -63,6 +63,7 @@ public class UsersServlet extends HttpServlet {
 		pw.append("<a href='pages/profile.jsp'><img src='data/menu3.png' alt='Menu' width='28' height='28'></a>");
 		pw.append(" | <a href='UsersServlet'><img src='data/refresh.png' alt='Refresh' width='28' height='28'></a>");
 		pw.append(" | <a href='UserEditServlet'><img src='data/useradd.png' alt='Add' width='30' height='30'></a>");
+		pw.append(" | <a href='UserSearchServlet'><img src='data/usersearch.png' alt='Search' width='30' height='30'></a>");
 		pw.println("<br/><br/>");
 		pw.append("<table>");
 		pw.append("<tr>");

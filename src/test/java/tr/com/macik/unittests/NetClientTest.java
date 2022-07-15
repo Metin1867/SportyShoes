@@ -24,6 +24,7 @@ import tr.com.macik.myapp.pojo.Employee;
 import tr.com.macik.myapp.pojo.Person;
 import tr.com.macik.myapp.pojo.PersonComm;
 import tr.com.macik.myapp.pojo.User;
+import tr.com.macik.utils.ServletHTMLUtil;
 
 public class NetClientTest {
 	// private static ObjectMapper mapper = new ObjectMapper();
@@ -40,9 +41,10 @@ public class NetClientTest {
 
 		// doTest();
 		
-		doWorkReadByID();
+		// doWorkReadByID();
 		
 		// doWorkPerson();
+		doSearchPerson();
 		
 		// doWorkCommunicationType();
 
@@ -52,6 +54,40 @@ public class NetClientTest {
 
 		// doWorkEmployee();
 	}
+
+	private static void doSearchPerson() {
+		String page = "UserSearchServlet?submit=doGet&usrid=";
+		int usrid = -1;
+		int prsid = 0;
+		String usrLogin = "emineacikalin@hotmail.com";
+		String firstname = "";
+		String lastname = "";
+		
+		User usr = new User(usrid, usrLogin, null, prsid, false, null, null, -1);
+		List<User> users = PersonDto.search(usr);
+		if (users != null && users.size()==1) {
+			usr = users.get(0);
+			page += usr.getUsrID();
+		} else {
+			Person prs = new Person(prsid, null, firstname, lastname, null);
+			List<Person> persons = PersonDto.search(prs);
+			if (persons != null && persons.size()==1) {
+				prs = persons.get(0);
+				usr = new User(-1, null, null, prs.getPrsID(), false, null, null, -1);
+				users = PersonDto.search(usr);
+				if (users != null && users.size()==1) {
+					usr = users.get(0);
+					page += usr.getUsrID();
+				} else {
+					page += "0";
+				}
+			} else {
+				page += "0";
+			}
+		}
+		System.out.println("Resultat: "+page);
+	}
+
 
 	private static void doWorkReadByID() {
 		Employee emp = new Employee();

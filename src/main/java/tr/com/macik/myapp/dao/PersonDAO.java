@@ -42,7 +42,7 @@ public class PersonDAO {
 	    		+ " FROM person";
 		String whereClause = "";
 		ArrayList<Integer> colPositions = new ArrayList<>();
-		if (person.getPrsID() !=0) {
+		if (person.getPrsID() >0) {
 			whereClause += andWhere(whereClause, "prsid", person.getPrsID());
 			//colPositions.add(1);
 		} else {
@@ -63,42 +63,41 @@ public class PersonDAO {
 				//colPositions.add(5);
 			}
 		}
-		if (!"".equals(whereClause.trim()))
+		if (!"".equals(whereClause.trim())) {
 			sql += " where" + whereClause;
-		System.out.println("Person search " + sql);
+			System.out.println("Person search " + sql);
 
-		try {
-			Connection c = dataSource.getConnection();
-			PreparedStatement p = c.prepareStatement(sql);
-			int pos = 1;
-			for (int colPos : colPositions) {
-				System.out.print("Search attribute at Position " + colPos + "/");
-				try {
-					switch (colPos) {
-					case 1: p.setInt(pos, person.getPrsID()); System.out.println(person.getPrsID()); break;
-					case 2: p.setString(pos, person.getSalutation()); System.out.println(person.getSalutation()); break;
-					case 3: p.setString(pos, person.getFirstname()); System.out.println(person.getFirstname()); break;
-					case 4: p.setString(pos, person.getLastname()); System.out.println(person.getLastname()); break;
-					case 5: p.setDate(pos, person.getBirthday()); System.out.println(person.getBirthday()); break;
+			try ( Connection c = dataSource.getConnection();
+				  PreparedStatement p = c.prepareStatement(sql) ) {
+				int pos = 1;
+				for (int colPos : colPositions) {
+					System.out.print("Search attribute at Position " + colPos + "/");
+					try {
+						switch (colPos) {
+						case 1: p.setInt(pos, person.getPrsID()); System.out.println(person.getPrsID()); break;
+						case 2: p.setString(pos, person.getSalutation()); System.out.println(person.getSalutation()); break;
+						case 3: p.setString(pos, person.getFirstname()); System.out.println(person.getFirstname()); break;
+						case 4: p.setString(pos, person.getLastname()); System.out.println(person.getLastname()); break;
+						case 5: p.setDate(pos, person.getBirthday()); System.out.println(person.getBirthday()); break;
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					pos++;
 				}
-				pos++;
-			}
-		    ResultSet rs = p.executeQuery(sql);
-		    
-		    Person newPerson;
-		    while(rs.next()) {
-			    newPerson = new Person(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5));
-		    	list.add(newPerson);
-		    }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			    ResultSet rs = p.executeQuery(sql);
 			    
+			    Person newPerson;
+			    while(rs.next()) {
+				    newPerson = new Person(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5));
+			    	list.add(newPerson);
+			    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return list;
 	}
 

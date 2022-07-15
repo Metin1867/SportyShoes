@@ -44,7 +44,7 @@ public class UserDAO {
 	    		+ "FROM user";
 		String whereClause = "";
 		ArrayList<Integer> colPositions = new ArrayList<>();
-		if (user.getUsrID() !=0) {
+		if (user.getUsrID() > 0) {
 			whereClause += andWhere(whereClause, "usrid", user.getUsrID());
 			//colPositions.add(1);
 		} else {
@@ -77,43 +77,43 @@ public class UserDAO {
 				//colPositions.add(8);
 			}
 		}
-		if (!"".equals(whereClause.trim()))
+		if (!"".equals(whereClause.trim())) {
 			sql += " where" + whereClause;
-		System.out.println("User search " + sql);
+			System.out.println("User search " + sql);
 
-		try {
-			Connection c = dataSource.getConnection();
-			PreparedStatement p = c.prepareStatement(sql);
-			int pos = 1;
-			for (int colPos : colPositions) {
-				System.out.print("Search attribute at Position " + colPos + "/");
-				try {
-					switch (colPos) {
-					case 1: p.setInt(pos, user.getUsrID()); System.out.println(user.getUsrID()); break;
-					case 2: p.setString(pos, user.getUsrLogin()); System.out.println(user.getUsrLogin()); break;
-					case 3: p.setString(pos, user.getUsrPassword()); System.out.println(user.getUsrPassword()); break;
-					case 4: p.setInt(pos, user.getPrsID()); System.out.println(user.getPrsID()); break;
-					case 5: p.setBoolean(pos, user.isActivated()); System.out.println(user.isActivated()); break;
-					case 6: p.setTimestamp(pos, user.getLastSuccessLogin()); System.out.println(user.getLastSuccessLogin()); break;
-					case 7: p.setTimestamp(pos, user.getLastFailedLogin()); System.out.println(user.getLastFailedLogin()); break;
-					case 8: p.setInt(pos, user.getCounterLogin()); System.out.println(user.getCounterLogin()); break;
+			try ( Connection c = dataSource.getConnection();
+				  PreparedStatement p = c.prepareStatement(sql);) {
+				int pos = 1;
+				for (int colPos : colPositions) {
+					System.out.print("Search attribute at Position " + colPos + "/");
+					try {
+						switch (colPos) {
+						case 1: p.setInt(pos, user.getUsrID()); System.out.println(user.getUsrID()); break;
+						case 2: p.setString(pos, user.getUsrLogin()); System.out.println(user.getUsrLogin()); break;
+						case 3: p.setString(pos, user.getUsrPassword()); System.out.println(user.getUsrPassword()); break;
+						case 4: p.setInt(pos, user.getPrsID()); System.out.println(user.getPrsID()); break;
+						case 5: p.setBoolean(pos, user.isActivated()); System.out.println(user.isActivated()); break;
+						case 6: p.setTimestamp(pos, user.getLastSuccessLogin()); System.out.println(user.getLastSuccessLogin()); break;
+						case 7: p.setTimestamp(pos, user.getLastFailedLogin()); System.out.println(user.getLastFailedLogin()); break;
+						case 8: p.setInt(pos, user.getCounterLogin()); System.out.println(user.getCounterLogin()); break;
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					pos++;
 				}
-				pos++;
+			    ResultSet rs = p.executeQuery(sql);
+			    
+			    User newUser;
+			    while(rs.next()) {
+				    newUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5), rs.getTimestamp(6), rs.getTimestamp(7), rs.getInt(8));
+			    	list.add(newUser);
+			    }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		    ResultSet rs = p.executeQuery(sql);
-		    
-		    User newUser;
-		    while(rs.next()) {
-			    newUser = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5), rs.getTimestamp(6), rs.getTimestamp(7), rs.getInt(8));
-		    	list.add(newUser);
-		    }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 			    
 		return list;
