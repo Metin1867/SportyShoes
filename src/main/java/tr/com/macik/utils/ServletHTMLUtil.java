@@ -5,7 +5,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class ServletHTMLUtil {
-
+	private static ServletHTMLUtil instance;
+	private boolean setNextInputElementReadOnly=false;
+	
+	private ServletHTMLUtil() {
+	}
+	
+	private static ServletHTMLUtil getInstance() {
+		if (instance == null)
+			instance = new ServletHTMLUtil();
+		return instance;
+	}
 	
 	public static CharSequence getNumberInput(String label, String fieldName, int value) {
 		return getNumberInput(label, fieldName, ""+getValue(value));
@@ -27,9 +37,13 @@ public class ServletHTMLUtil {
 		return getTextInput(label, fieldName, getValue(value));
 	}
 
+	public static CharSequence getDateInput(String label, String fieldName, Date dateValue) {
+		return getLabel(label, fieldName)+"<input type='date' name='"+fieldName+"' value='"+getValue(dateValue)+"'><br/>";
+	}
+
 	public static CharSequence getBooleanInput(String label, String fieldName, boolean enabled) {
 	    // <input type="checkbox" id="ID" name="{id}" checked>
-		return  getLabel(label, fieldName)+"<input type='checkbox' name='"+fieldName+"' value='"+getValue(enabled)+" "+(enabled?"checked":"")+"'><br/>";
+		return  getLabel(label, fieldName)+"<input type='checkbox' name='"+fieldName+"' value='"+getValue(enabled)+"' "+(enabled?"checked":"")+"><br/>";
 	}
 
 	public static CharSequence getNumberInputReadOnly(String label, String fieldName, int value) {
@@ -42,7 +56,13 @@ public class ServletHTMLUtil {
 
 
 	public static CharSequence getCurrencyInput(String label, String fieldName, float value) {
-		return getLabel(label, fieldName)+"<input type='number' step='0.01' name='"+fieldName+"' value='"+getValue(value)+"'><br/>";
+		String input = getLabel(label, fieldName);
+		input += "<input type='number' step='0.01' name='"+fieldName+"' value='"+getValue(value)+"'";
+		if (getInstance().setNextInputElementReadOnly) {
+			input += " readonly";
+			getInstance().setNextInputElementReadOnly=false;
+		} 
+		return input+"><br/>";
 	}
 
 	public static byte[] getByteValue(String value) {
@@ -86,7 +106,7 @@ public class ServletHTMLUtil {
 	public static boolean getBooleanValue(String value, boolean defaultValue) {
 		if (value==null)
 			return defaultValue;
-		return ("true".equals(value) ? true : false);
+		return (value!=null ? true : false);
 	}
 
 	public static boolean getBooleanValue(String value) {
@@ -322,5 +342,10 @@ public class ServletHTMLUtil {
 		whereClause += " " + column + " = '" + value + "'";
 		
 		return whereClause;		
+	}
+
+	public static ServletHTMLUtil readonly() {
+		getInstance().setNextInputElementReadOnly=true;
+		return getInstance();
 	}
 }
