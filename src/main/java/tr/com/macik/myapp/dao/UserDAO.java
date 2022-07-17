@@ -73,7 +73,7 @@ public class UserDAO {
 				//colPositions.add(7);
 			}
 			if (user.getCounterLogin()>= 0) {
-				whereClause += andWhere(whereClause, "counter_login", user.getPrsID());
+				whereClause += andWhere(whereClause, "counter_login", user.getCounterLogin());
 				//colPositions.add(8);
 			}
 		}

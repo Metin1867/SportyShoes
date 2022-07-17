@@ -30,6 +30,7 @@ public class PurchaseEditServlet extends HttpServlet {
     private boolean isNew=true;
 	private String cmdPars="";
 	private String userid="";
+	private int prsid;
       
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,37 +44,37 @@ public class PurchaseEditServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("PurchaseEditServlet.doGet(...)");
+		AppLog.out("PurchaseEditServlet.doGet(...)");
 		PrintWriter pw = response.getWriter();
 		pw.append("Served at: ").append(request.getContextPath());
 		response.setContentType("text/html");
 		isNew=true;
+		cmdPars="";
+
 		userid = request.getSession().getAttribute("userid").toString();
 		System.out.println("USer Login: "+ userid);
+		prsid = PersonDto.getPrsId(userid);
+		
 		String pchidStr = request.getParameter("pchid");
 		int pchid = -1;
 		Purchase pch = new Purchase();
-		if (pchidStr!=null) {
-			pchid = Integer.valueOf(pchidStr);
+		if (pchidStr==null) {
+			isNew = true;
+
+			pch.setBasketCreated(AppLog.currentTime());
+			if (userid.startsWith("admin")) {
+
+			} else {
+				pch.setPrsID(prsid);
+				//pch.setDeliveryAddress(User Delivery Address);
+				//pch.setInvoiceAddress(User Invoice Address);
+			}
+		} else {
 			isNew = false;
+			pchid = Integer.valueOf(pchidStr);
 
 			pch.setPchID(pchid);
 			pch = PurchaseDto.readByID(pch);
-			if (pch==null) {
-				User user = new User();
-				user.setUsrLogin(userid);
-				user = PersonDto.search(user).get(0);
-				
-				pch = new Purchase();
-				pch.setBasketCreated(AppLog.currentTime());
-				if (userid.startsWith("admin")) {
-
-				} else {
-					pch.setPrsID(user.getPrsID());
-					//pch.setDeliveryAddress(User Delivery Address);
-					//pch.setInvoiceAddress(User Invoice Address);
-				}
-			}
 		}
 		showEditForm(pw, pch);
 	}
@@ -86,12 +87,12 @@ public class PurchaseEditServlet extends HttpServlet {
 			pw.append(ServletHTMLUtil.getNumberInput("Person Identifier", "prsid", pch.getPrsID() ));
 		else
 			pw.append(ServletHTMLUtil.getNumberInputReadOnly("Person Identifier", "prsid", pch.getPrsID() ));
-		pw.append(ServletHTMLUtil.getTextInput("Basket created", "basket_created", pch.getBasketCreated() ));
-		pw.append(ServletHTMLUtil.getTextInput("Purchase activated", "purchase_activated", pch.getPurchaseActivated() ));
+		pw.append(ServletHTMLUtil.getDateInput("Basket created", "basket_created", pch.getBasketCreated() ));
+		pw.append(ServletHTMLUtil.getDateInput("Purchase activated", "purchase_activated", pch.getPurchaseActivated() ));
 		pw.append(ServletHTMLUtil.getNumberInput("Delivery Address", "delivery_address", pch.getDeliveryAddress() ));
-		pw.append(ServletHTMLUtil.getTextInput("Delivery Date", "delivery_date", pch.getDeliveryDate() ));
+		pw.append(ServletHTMLUtil.getDateInput("Delivery Date", "delivery_date", pch.getDeliveryDate() ));
 		pw.append(ServletHTMLUtil.getNumberInput("Invoice Address", "invoice_address", pch.getInvoiceAddress() ));
-		pw.append(ServletHTMLUtil.getTextInput("Payment Date", "payment_date", pch.getPaymentDate() ));
+		pw.append(ServletHTMLUtil.getDateInput("Payment Date", "payment_date", pch.getPaymentDate() ));
 		pw.append(ServletHTMLUtil.getSubmitInput("Save"));
 		pw.append(ServletHTMLUtil.getSubmitInput("Cancel"));
 		pw.append(ServletHTMLUtil.endForm()); 
@@ -101,6 +102,8 @@ public class PurchaseEditServlet extends HttpServlet {
 		if (!isNew) {
 			PurchaseDetails pcd = new PurchaseDetails();
 			pcd.setPchID(pch.getPchID());
+			pcd.setEnabled(false);	// don't search	
+			pcd.setCount(-1);		// don't search
 			showEditForm(pw, pcd);
 		}
 	}
@@ -128,21 +131,24 @@ public class PurchaseEditServlet extends HttpServlet {
 		// Data
 		if (purchaseDetails != null && purchaseDetails.size()>0)
 			for (PurchaseDetails purchaseDetail : purchaseDetails) {
-			pw.append("<tr>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPcdID())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPchID())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPrdID())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.isEnabled())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getCount())).append("</td>").println();
-			pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPrice())).append("</td>").println();
-			// Menu Edit/Delete Row
-			String cmdPars = "pcdid="+purchaseDetail.getPcdID();
-			pw.append("<td>").append("<a href='PurchaseDetailsEditServlet?"+cmdPars+"'><img src='data/useredit.png' alt='Edit' width='30' height='30'></a>").println();
-			cmdPars = cmdPars+"&msg="+purchaseDetail.getPchID()+"/"+purchaseDetail.getPrdID();
-			pw.append("|<a href='PurchaseDetailsDeleteServlet?"+cmdPars+"'><img src='data/userdelete.png' alt='Delete' width='30' height='30'></a>");
-			pw.append("</td>").println();
-			pw.append("</tr>").println();
-		}
+				pw.append("<tr>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPcdID())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPchID())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPrdID())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.isEnabled())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getCount())).append("</td>").println();
+				pw.append("<td>").append(ServletHTMLUtil.getValue(purchaseDetail.getPrice())).append("</td>").println();
+				// Menu Edit/Delete Row
+				String cmdPars = "&pchid="+purchaseDetail.getPchID();
+				cmdPars += "&pcdid="+purchaseDetail.getPcdID();
+				AppLog.keyVal("<a href='PurchaseDetailsEditServlet?"+cmdPars+"'>", "Command Parse Arguments", cmdPars);
+				pw.append("<td>").append("<a href='PurchaseDetailsEditServlet?"+cmdPars+"'><img src='data/useredit.png' alt='Edit' width='30' height='30'></a>").println();
+				cmdPars += "&msg="+purchaseDetail.getPchID()+"/"+purchaseDetail.getPrdID();
+				AppLog.keyVal("<a href='PurchaseDetailsDeleteServlet?"+cmdPars+"'>", "Command Parse Arguments", cmdPars);
+				pw.append("|<a href='PurchaseDetailsDeleteServlet?"+cmdPars+"'><img src='data/userdelete.png' alt='Delete' width='30' height='30'></a>");
+				pw.append("</td>").println();
+				pw.append("</tr>").println();
+			}
 		pw.append("<table>");
 	}
 
@@ -150,12 +156,13 @@ public class PurchaseEditServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("ProductEditServlet.doPost(...)");
+		AppLog.out("PurchaseEditServlet.doPost(...)");
 		PrintWriter pw = response.getWriter();
 		pw.append("Served at: ").append(request.getContextPath());
 		response.setContentType("text/html");
 		String action = request.getParameter("submit");
 		if ("doGet".equals(action)) {
+			AppLog.out("Skip to doGet(...)");
 			doGet(request, response);
 		} else {
 			if (!"Cancel".equals(action)) {
@@ -170,18 +177,19 @@ public class PurchaseEditServlet extends HttpServlet {
 				Purchase pch = new Purchase(pchid, prsid, basketCreated, purchaseActivated, deliveryAddress, deliveryDate, invoiceAddress, paymentDate);
 				
 				if (isNew) {
-					System.out.println("Purchase INSERT");
+					AppLog.keyVal("Purchase", "INSERT");
 					PurchaseDto.create(pch);
 				} else {
-					System.out.println("Purchase UPDATE");
+					AppLog.keyVal("Purchase", "UPDATE");
 					PurchaseDto.update(pch);
 				}
 			}
-		}
-		System.out.println("Redirect to ProductsServlet");
-		RequestDispatcher rd = request.getRequestDispatcher("PurchasesServlet");
-		rd.forward(request, response);
-		
+			
+			String redirect="PurchasesServlet";
+			AppLog.keyVal("Redirect to", redirect);
+			RequestDispatcher rd = request.getRequestDispatcher(redirect);
+			rd.forward(request, response);
+		}		
 	}
 
 }

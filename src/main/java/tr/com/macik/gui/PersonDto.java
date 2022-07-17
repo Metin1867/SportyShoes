@@ -201,4 +201,12 @@ public class PersonDto {
 		client.end();
 		return toPersonList(json);
 	}
+
+	public static int getPrsId(String userid) {
+		User user = new User();
+		user.setUsrLogin(userid);
+		user.setCounterLogin(-1);
+		user = PersonDto.search(user).get(0);
+		return user.getPrsID();
+	}
 }

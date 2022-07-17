@@ -44,7 +44,7 @@ public class PurchaseDetailsDAO {
 		String whereClause = "";
 		ArrayList<Integer> colPositions = new ArrayList<>();
 		if (purchaseDetails.getPcdID() >0) {
-			whereClause += ServletHTMLUtil.andWhere(whereClause, "pcdid", purchaseDetails.getPchID());
+			whereClause += ServletHTMLUtil.andWhere(whereClause, "pcdid", purchaseDetails.getPcdID());
 			//colPositions.add(1);
 		} else {
 			if (purchaseDetails.getPchID() >0) {
@@ -55,10 +55,10 @@ public class PurchaseDetailsDAO {
 				whereClause += ServletHTMLUtil.andWhere(whereClause, "prdid", purchaseDetails.getPrdID());
 				//colPositions.add(3);
 			}
-			if (purchaseDetails.isEnabled()) {
+			/*if (purchaseDetails.isEnabled()) {
 				whereClause += ServletHTMLUtil.andWhere(whereClause, "enabled", purchaseDetails.isEnabled());
 				//colPositions.add(4);
-			}
+			}*/
 			if (purchaseDetails.getCount() >=0) {
 				whereClause += ServletHTMLUtil.andWhere(whereClause, "count", purchaseDetails.getCount());
 				//colPositions.add(5);
