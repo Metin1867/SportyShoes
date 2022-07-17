@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tr.com.macik.myapp.dao.PurchaseDAO;
+import tr.com.macik.myapp.pojo.Person;
 import tr.com.macik.myapp.pojo.Purchase;
 
 @RestController
@@ -34,8 +35,13 @@ public class PurchaseController {
 	}
 	
 	@GetMapping("/pch/getall")
-	public List<Purchase> getCategories(){
+	public List<Purchase> getAl(){
 		return dao.getall();
+	}
+
+	@PostMapping("/pch/search")
+	public List<Purchase> getSearch(@RequestBody Purchase purchase){
+		return dao.search(purchase);
 	}
 
 	@DeleteMapping("/pch/delete")

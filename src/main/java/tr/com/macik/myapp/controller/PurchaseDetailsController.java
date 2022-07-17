@@ -34,8 +34,13 @@ public class PurchaseDetailsController {
 	}
 	
 	@GetMapping("/pcd/getall")
-	public List<PurchaseDetails> getCategories(){
+	public List<PurchaseDetails> getAll(){
 		return dao.getall();
+	}
+
+	@PostMapping("/pcd/search")
+	public List<PurchaseDetails> getSearch(@RequestBody PurchaseDetails purchaseDetails){
+		return dao.search(purchaseDetails);
 	}
 
 	@DeleteMapping("/pcd/delete")

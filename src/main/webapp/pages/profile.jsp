@@ -37,7 +37,7 @@
 			out.println("<a href='/CategoriesServlet'>Category</a><br>");
 		} 
 		out.println("<a href='/ShopServlet'>Shop</a><br>");
-		out.println("<a href='/OrderServlet'>Order</a><br>");
+		out.println("<a href='/PurchasesServlet'>Purchase</a><br>");
 		out.println("<a href='/Logout'>Logout</a><br>");
 	} else {
 			out.println("Redirect to main page");

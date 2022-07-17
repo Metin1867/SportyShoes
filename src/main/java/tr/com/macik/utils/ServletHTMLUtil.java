@@ -27,6 +27,11 @@ public class ServletHTMLUtil {
 		return getTextInput(label, fieldName, getValue(value));
 	}
 
+	public static CharSequence getBooleanInput(String label, String fieldName, boolean enabled) {
+	    // <input type="checkbox" id="ID" name="{id}" checked>
+		return  getLabel(label, fieldName)+"<input type='checkbox' name='"+fieldName+"' value='"+getValue(enabled)+" "+(enabled?"checked":"")+"'><br/>";
+	}
+
 	public static CharSequence getNumberInputReadOnly(String label, String fieldName, int value) {
 		return getNumberInputReadOnly(label, fieldName, getValue(value));
 	}
@@ -78,6 +83,16 @@ public class ServletHTMLUtil {
 		return value.toString();
 	}
 
+	public static boolean getBooleanValue(String value, boolean defaultValue) {
+		if (value==null)
+			return defaultValue;
+		return ("true".equals(value) ? true : false);
+	}
+
+	public static boolean getBooleanValue(String value) {
+		return getBooleanValue(value, false);
+	}
+
 	public static CharSequence getSubmitInput(String name) {
 		return "<input type='submit' name='submit' value='"+name+"'>";
 	}
@@ -97,6 +112,79 @@ public class ServletHTMLUtil {
 	public static CharSequence startFormGet(String servletName) {
 		return startForm(servletName, "get");
 	}
+
+	public static Date getDateTime(String dateStr) {
+		if (dateStr==null || "".equals(dateStr))
+			return null;
+        String[] supportedTimeFormats = {
+        		"h",
+				"h:m",
+				"h:m:s",
+        		"hh",
+				"hh:mm",
+				"hh:mm:ss"
+        };
+        String[] supportedDateFormats = {
+        		// getDate("2013-09-25");
+				"yyyy-MM-dd",
+				"yyyy-M-d",
+				"yy-MM-dd",
+				"yy-M-d",
+		        // getDate("2013/09/25");
+				"yyyy/MM/dd",
+				"yyyy/M/d",
+				"yy/MM/dd",
+				"yy/M/d",
+		        // getDate("20130925");
+				"yyyyMMdd",
+				"yyMMdd",
+		        // getDate("2013.09.25");
+				"yyyy.MM.dd",
+				"yyyy.M.d",
+				"yy.MM.dd",
+				"yy.M.d",
+				// getDate("2013 09 25");
+				"yyyy MM dd",
+				"yyyy M d",
+				"yy MM dd",
+				"yy M d",
+		
+				// getDate("25.09.2013");
+				"dd.MM.yyyy",
+				"d.M.yyyy",
+				"dd.MM.yy",
+				"d.M.yy",
+		        // getDate("25-09-2013");
+				"dd-MM-yyyy",
+				"d-M-yyyy",
+				"dd-MM-yy",
+				"d-M-yy",
+		        // getDate("25/09/2013");
+				"dd/MM/yyyy",
+				"d/M/yyyy",
+				"dd/MM/yy",
+				"d/M/yy",
+		        //! getDate("25 09 2013");
+				"dd MM yyyy",
+				"d M yyyy",
+				"dd MM yy",
+				"d M yy",
+		        // getDate("25092013");
+				"ddMMyyyy",
+				"ddMMyy"
+				};
+        String format;
+        for (String formatDate : supportedDateFormats) {
+            for (String formatTime : supportedTimeFormats) {
+            	format = formatDate + " " + formatTime;
+	        	if (isDateStrValidFormat(format, dateStr))
+	        		return getDate(format, dateStr);
+            }
+        }
+        
+		return null;
+	}
+
 
 	public static Date getDate(String dateStr) {
 		if (dateStr==null || "".equals(dateStr))
@@ -151,11 +239,13 @@ public class ServletHTMLUtil {
 				"ddMMyy"
 				};
         for (String format : supportedDateFormats) {
-        	if (ServletHTMLUtil.isDateStrValidFormat(format, dateStr))
+        	if (ServletHTMLUtil.isDateStrValidFormat(format, dateStr)) {
+        		System.out.println(format);
         		return ServletHTMLUtil.getDate(format, dateStr);
+        	}
         }
         
-		return null;
+    	return getDateTime(dateStr);
 	}
 
 	public static Date getDate(String format, String dateStr) {
@@ -188,5 +278,49 @@ public class ServletHTMLUtil {
 
 	public static CharSequence getByteInput(String label, String fieldName, byte[] byteStream) {
 		return getLabel(label, fieldName)+"<input type='text' name='"+fieldName+"' value='"+getValue(byteStream)+"'><br/>";
+	}
+
+	public static String andWhere(String whereClauseOrig, String column, long value) {
+		String whereClause ="";
+		if (whereClauseOrig!=null && !"".equals(whereClauseOrig))
+			whereClause += " and ";
+		if (column==null || "".equals(column.trim()))
+			return whereClauseOrig;
+		whereClause += " " + column + " = " + value;
+		
+		return whereClause;		
+	}
+
+	public static String andWhere(String whereClauseOrig, String column, String value) {
+		String whereClause ="";
+		if (whereClauseOrig!=null && !"".equals(whereClauseOrig))
+			whereClause += " and ";
+		if (column==null || "".equals(column.trim()))
+			return whereClauseOrig;
+		whereClause += " " + column + " = '" + value + "'";
+		
+		return whereClause;		
+	}
+
+	public static String andWhere(String whereClauseOrig, String column, boolean value) {
+			String whereClause ="";
+			if (whereClauseOrig!=null && !"".equals(whereClauseOrig))
+				whereClause += " and ";
+			if (column==null || "".equals(column.trim()))
+				return whereClauseOrig;
+			whereClause += " " + column + " = '" + (value?"true":"false") + "'";
+			
+			return whereClause;		
+	}
+
+	public static String andWhere(String whereClauseOrig, String column, float value) {
+		String whereClause ="";
+		if (whereClauseOrig!=null && !"".equals(whereClauseOrig))
+			whereClause += " and ";
+		if (column==null || "".equals(column.trim()))
+			return whereClauseOrig;
+		whereClause += " " + column + " = '" + value + "'";
+		
+		return whereClause;		
 	}
 }
