@@ -3,12 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Profile</title>
-    <script src="jquery-3.6.0.min.js"></script> 
-    <script src="sportyshoes.js"></script> 
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
 </head>
 <body>
+<h1>Reports</h1>
 <table width="100%">
 <tr><th colspan="3"><div data-include="healogin"></div>
 </th></tr>
@@ -31,14 +30,9 @@
 		
 	if (usrLogin != null) {
 		if (isEmployee) {
-			out.println("<a href='/UsersServlet'>Users</a><br>");
-			out.println("<a href='/EmployeesServlet'>Employee</a><br>");
-			out.println("<a href='/ProductsServlet'>Product</a><br>");
-			out.println("<a href='/CategoriesServlet'>Category</a><br>");
-			out.println("<a href='/pages/report.jsp'>Reports</a><br>");
+			out.println("<a href='/PurchasesReportServlet?orderby=\"purchase date\"'>Purchase by Purchase Date</a><br>");
+			out.println("<a href='/PurchasesReportServlet?orderby=category'>Purchase by Category</a><br>");
 		} 
-		out.println("<a href='/ShopServlet'>Shop</a><br>");
-		out.println("<a href='/PurchasesServlet'>Purchase</a><br>");
 		out.println("<a href='/Logout'>Logout</a><br>");
 	} else {
 			out.println("Redirect to main page");

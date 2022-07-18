@@ -8,14 +8,13 @@ import tr.com.macik.utils.ServletHTMLUtil;
 
 public class ServletHTMLUtilTest {
 	public static void main(String[] args) {
-		ServletHTMLUtil testObject= new ServletHTMLUtil();
-		AppLog.out(testObject.getDateTime("2022-07-16 11"));
-		AppLog.out(testObject.getDateTime("2022-07-16 11:33"));
-		AppLog.out(testObject.getDateTime("2022-07-16 11:21:44"));
-		AppLog.out(testObject.getDate("2022-07-16 1:43:57"));
+		AppLog.out(ServletHTMLUtil.getDateTime("2022-07-16 11"));
+		AppLog.out(ServletHTMLUtil.getDateTime("2022-07-16 11:33"));
+		AppLog.out(ServletHTMLUtil.getDateTime("2022-07-16 11:21:44"));
+		AppLog.out(ServletHTMLUtil.getDate("2022-07-16 1:43:57"));
 		
 		// Date actualDateTime = new Date(System.currentTimeMillis());
-		AppLog.keyVal("Actual Time", testObject.getDate(AppLog.dateToString(AppLog.currentTime())));
+		AppLog.keyVal("Actual Time", ServletHTMLUtil.getDate(AppLog.dateToString(AppLog.currentTime())));
 		
 	}
 
