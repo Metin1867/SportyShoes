@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tr.com.macik.client.NetClient;
-import tr.com.macik.myapp.pojo.Person;
 import tr.com.macik.myapp.pojo.Purchase;
 import tr.com.macik.myapp.pojo.PurchaseDetails;
 
